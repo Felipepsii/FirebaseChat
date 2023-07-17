@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import "./App.css"
@@ -32,6 +32,7 @@ function App() {
 
 function ChatRoom() {
 
+  const dummy = useRef()
   const messageRef = collection(databaseApp, "messages");
   const QuerryMessages = query(messageRef, orderBy("createdAt"), limit(25));
   const [messages] = useCollectionData(QuerryMessages, { idField: "id" });
@@ -50,12 +51,14 @@ function ChatRoom() {
     });
     setFormValue('');
 
+    dummy.current.scrollIntoView({ behavior: 'smooth' })
   };
 
   return (
     <>
       <main>
         {messages && messages.map((msg, index) => <ChatMessage key={index} message={msg} />)}
+        <div ref={dummy}></div>
       </main>
 
       <form onSubmit={sendMessage}>
@@ -89,7 +92,7 @@ function SignIn() {
   const [signInWithGoogle] = useSignInWithGoogle(auth)
 
   return (
-    <button className='sign-in' onClick={() => signInWithGoogle()}>Entrar com o Google</button>
+    <button className='sign-in' onClick={() => signInWithGoogle()}>Sign-in with Google</button>
 
   );
 };
@@ -97,7 +100,7 @@ function SignIn() {
 function SignOut() {
   return (
     auth.currentUser && (
-      <button className='sign-out' onClick={() => auth.signOut()}> Sair</button>
+      <button className='sign-out' onClick={() => auth.signOut()}> Logout</button>
     )
   );
 };
