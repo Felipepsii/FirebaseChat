@@ -15,7 +15,6 @@ function App() {
     <div className='App'>
       <header>
         <h1>WebChat</h1>
-
         <SignOut />
       </header>
 
@@ -34,7 +33,7 @@ function App() {
 function ChatRoom() {
 
   const messageRef = collection(databaseApp, "messages");
-  const QuerryMessages = query(messageRef, orderBy("created"), limit(25));
+  const QuerryMessages = query(messageRef, orderBy("createdAt"), limit(25));
   const [messages] = useCollectionData(QuerryMessages, { idField: "id" });
 
   const [formValue, setFormValue] = useState("");
